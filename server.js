@@ -75,5 +75,5 @@ storeService.initialize()
         });
     })
     .catch((err) => {
-        console.error(err);
+        console.error("Initialization failed: ", err);
     });
