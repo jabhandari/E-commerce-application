@@ -14,8 +14,14 @@ const express = require('express');
 const path = require('path');
 const storeService = require('./store-service');
 const app = express();
- 
-app.use(express.static('public'));
+require('pg'); 
+const Sequelize = require('sequelize');
+
+// Set up views directory
+app.set('views', __dirname + '/views');
+
+// Serve static files from the 'public' folder
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
     res.redirect('/about');
@@ -55,10 +61,12 @@ app.get('/categories', (req, res) => {
         });
 });
 
+// 404 handler
 app.use((req, res) => {
     res.status(404).send("Page Not Found");
 });
 
+// Initialize store service and start the server
 storeService.initialize()
     .then(() => {
         const PORT = process.env.PORT || 8080;
