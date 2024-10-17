@@ -14,8 +14,8 @@ const express = require('express');
 const path = require('path');
 const storeService = require('./store-service');
 const app = express();
-require('pg'); 
-const Sequelize = require('sequelize');
+//require('pg'); 
+//const Sequelize = require('sequelize');
 
 // Set up views directory
 app.set('views', __dirname + '/views');
