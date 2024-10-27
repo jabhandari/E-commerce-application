@@ -11,69 +11,54 @@ GitHub Repository URL:
 
 ********************************************************************************/ 
 const express = require('express');
-const path = require('path');
-const storeService = require('./store-service');
+const storeService = require("./store-service");
+const path = require("path");
 const app = express();
-//require('pg'); 
-//const Sequelize = require('sequelize');
 
-// Set up views directory
-app.set('views', __dirname + '/views');
+const HTTP_PORT = process.env.PORT || 8080;
 
-// Serve static files from the 'public' folder
-app.use(express.static(__dirname + '/public'));
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    res.redirect('/about');
+    res.redirect("/about");
 });
 
 app.get('/about', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'about.html'));
+    res.sendFile(path.join(__dirname, "/views/about.html"))
 });
 
-app.get('/shop', (req, res) => {
-    storeService.getPublishedItems()
-        .then((data) => {
-            res.json(data);
-        })
-        .catch((err) => {
-            res.json({ message: err });
-        });
-});
-
-app.get('/items', (req, res) => {
-    storeService.getAllItems()
-        .then((data) => {
-            res.json(data);
-        })
-        .catch((err) => {
-            res.json({ message: err });
-        });
-});
-
-app.get('/categories', (req, res) => {
-    storeService.getCategories()
-        .then((data) => {
-            res.json(data);
-        })
-        .catch((err) => {
-            res.json({ message: err });
-        });
-});
-
-// 404 handler
-app.use((req, res) => {
-    res.status(404).send("Page Not Found");
-});
-
-// Initialize store service and start the server
-storeService.initialize()
-    .then(() => {
-        const PORT = process.env.PORT || 8080;
-        app.listen(PORT, () => {
-            console.log(`Express http server listening on port ${PORT}`);
-        });
-    })
-    .catch((err) => {
-        console.error("Initialization failed: ", err);
+app.get('/store', (req,res)=>{
+    storeService.getPublishedItems().then((data=>{
+        res.json(data);
+    })).catch(err=>{
+        res.json({message: err});
     });
+});
+
+app.get('/items', (req,res)=>{
+    storeService.getAllItems().then((data=>{
+        res.json(data);
+    })).catch(err=>{
+        res.json({message: err});
+    });
+});
+
+app.get('/categories', (req,res)=>{
+    storeService.getCategories().then((data=>{
+        res.json(data);
+    })).catch(err=>{
+        res.json({message: err});
+    });
+});
+
+app.use((req,res)=>{
+    res.status(404).send("404 - Page Not Found")
+})
+
+storeService.initialize().then(()=>{
+    app.listen(HTTP_PORT, () => { 
+        console.log('server listening on: ' + HTTP_PORT); 
+    });
+}).catch((err)=>{
+    console.log(err);
+})
