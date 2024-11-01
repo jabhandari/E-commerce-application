@@ -13,13 +13,21 @@ GitHub Repository URL:
 const express = require('express');
 const storeService = require("./store-service");
 const path = require("path");
-const app = express();
 const multer = require("multer");
 const cloudinary = require('cloudinary').v2;
 const streamifier = require('streamifier');
 
+const app = express();
 
 const HTTP_PORT = process.env.PORT || 8080;
+cloudinary.config({
+    cloud_name: 'dyfd3rjkn',
+    api_key: '499268822322956',
+    api_secret: '-Lt12gltJ1e63Dp6GmbGtnDdJGw',
+    secure: true
+});
+
+const upload = multer(); 
 
 app.use(express.static('public'));
 
@@ -59,28 +67,6 @@ app.get('/items/add',(req,res)=>{
     res.sendFile(path.join(__dirname,'views','addItem.html'));
 });
 
-app.use((req,res)=>{
-    res.status(404).send("404 - Page Not Found")
-})
-
-storeService.initialize().then(()=>{
-    app.listen(HTTP_PORT, () => { 
-        console.log('server listening on: ' + HTTP_PORT); 
-    });
-}).catch((err)=>{
-    console.log(err);
-})
-
-
-cloudinary.config({
-    cloud_name: 'dyfd3rjkn',
-    api_key: '499268822322956',
-    api_secret: '-Lt12gltJ1e63Dp6GmbGtnDdJGw',
-    secure: true
-});
-
-const upload = multer(); // no { storage: storage } 
-
 app.post('/items/add', upload.single("featureImage"), (req, res) => {
     if (req.file) {
         let streamUpload = (req) => {
@@ -116,3 +102,38 @@ app.post('/items/add', upload.single("featureImage"), (req, res) => {
             .catch(err => res.status(500).send(err));
     }
 });
+
+
+app.get('/items', (req, res) => {
+    if (req.query.category) {
+        storeService.getItemsByCategory(req.query.category)
+            .then(items => res.json(items))
+            .catch(err => res.status(404).send(err));
+    } else if (req.query.minDate) {
+        storeService.getItemsByMinDate(req.query.minDate)
+            .then(items => res.json(items))
+            .catch(err => res.status(404).send(err));
+    } else {
+        storeService.getAllItems() 
+            .then(items => res.json(items))
+            .catch(err => res.status(500).send(err));
+    }
+});
+
+app.get('/item/:id', (req, res) => {
+    storeService.getItemById(req.params.id)
+        .then(item => res.json(item))
+        .catch(err => res.status(404).send(err));
+});
+
+app.use((req,res)=>{
+    res.status(404).send("404 - Page Not Found")
+})
+
+storeService.initialize().then(()=>{
+    app.listen(HTTP_PORT, () => { 
+        console.log('server listening on: ' + HTTP_PORT); 
+    });
+}).catch((err)=>{
+    console.log(err);
+})
