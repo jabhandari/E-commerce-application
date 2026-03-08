@@ -1,53 +1,191 @@
-# E-commerce Application
+# E-commerce Web Application
 
-A small Node.js/Express sample e-commerce app for managing and viewing items and categories.
+A simple **Node.js and Express-based e-commerce web application** that allows users to browse store items, explore categories, and add new products with image uploads.
 
-## Features
-- Serve static frontend in `public/` and simple HTML views in `views/`
-- JSON APIs for items, categories and published store items
-- Add new items with optional image upload (Cloudinary)
+This project demonstrates backend development concepts such as **REST APIs, server-side routing, file uploads, and JSON-based data storage**.
 
-## Prerequisites
-- Node.js (v14+ recommended)
+---
 
-## Install
-```bash
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [API Endpoints](#api-endpoints)
+- [Future Improvements](#future-improvements)
+- [Author](#author)
+
+---
+
+# Project Overview
+
+This application simulates a small **online store backend** where users can:
+
+- Browse available products
+- Filter items by category or date
+- Add new store items
+- Upload product images
+- Access product data through REST API endpoints
+
+The project uses **JSON files as lightweight data storage** instead of a database, making it easy to run locally.
+
+---
+
+# Features
+
+- Product listing page (`/shop`)
+- Add new store items
+- Image upload using **Cloudinary**
+- RESTful API endpoints
+- Category-based filtering
+- Date filtering for products
+- Static frontend pages served with Express
+- JSON-based data storage
+
+---
+
+# Technologies Used
+
+### Backend
+- **Node.js**
+- **Express.js**
+
+### File Upload
+- **Multer**
+
+### Image Hosting
+- **Cloudinary**
+
+### Data Storage
+- **JSON files**
+
+### Other Libraries
+- Streamifier
+
+---
+
+# Project Structure
+
+```
+ecommerceApp
+│
+├── server.js
+├── store-service.js
+├── package.json
+│
+├── data
+│   ├── items.json
+│   └── categories.json
+│
+├── views
+│   ├── about.html
+│   └── addItem.html
+│
+└── public
+    ├── css
+    │   └── main.css
+```
+
+---
+
+# Installation
+
+### 1 Clone the repository
+
+```
+git clone https://github.com/YOUR_USERNAME/ecommerceApp.git
+cd ecommerceApp
+```
+
+### 2 Install dependencies
+
+```
 npm install
 ```
 
-## Run
-```bash
+---
+
+# Running the Application
+
+Start the server:
+
+```
 npm start
-# or: node server.js
 ```
 
-The server listens on `PORT` environment variable or defaults to `8080`.
+or
 
-## Important Files
-- `server.js` — main Express server and route definitions
-- `store-service.js` — data/service layer reading `data/` (items & categories)
-- `data/` — contains `items.json` and `categories.json`
-- `views/` — HTML pages (`about.html`, `addItem.html`)
-- `public/` — static assets (CSS, images)
+```
+node server.js
+```
 
-## API Endpoints
-- `GET /` — redirects to `/about`
-- `GET /about` — About page
-- `GET /store` — returns published items (JSON)
-- `GET /items` — returns all items (JSON); supports queries:
-  - `?category=...` — filter by category
-  - `?minDate=YYYY-MM-DD` — filter by min date
-- `GET /item/:id` — returns a single item by id (JSON)
-- `GET /categories` — returns list of categories (JSON)
-- `GET /items/add` — form page to add a new item
-- `POST /items/add` — submit a new item (supports multipart file `featureImage`)
+The application will run at:
 
-## Image Uploads
-This project uses Cloudinary for image uploads (see `server.js`). To use your own Cloudinary account, set Cloudinary credentials in `server.js` or update the code to read from environment variables.
+```
+http://localhost:8080
+```
 
-## Development Notes
-- Dependencies are listed in `package.json` (Express, multer, cloudinary, sequelize, pg, etc.)
-- Data is currently stored in JSON files under `data/` which `store-service.js` reads.
+---
 
-## License
-This project is provided as-is.
+# Application Pages
+
+| Page | Description |
+|-----|-----|
+| `/about` | Project overview page |
+| `/shop` | Browse available store items |
+| `/items/add` | Add new products |
+
+---
+
+# API Endpoints
+
+| Method | Endpoint | Description |
+|------|------|------|
+| GET | `/store` | Returns published store items |
+| GET | `/items` | Returns all items |
+| GET | `/item/:id` | Returns item by ID |
+| GET | `/categories` | Returns available categories |
+
+Query parameters supported:
+
+```
+/items?category=...
+/items?minDate=YYYY-MM-DD
+```
+
+---
+
+# Data Storage
+
+The application uses **JSON files as local storage**:
+
+```
+data/items.json
+data/categories.json
+```
+
+New items added through the application are saved directly into `items.json`.
+
+---
+
+# Future Improvements
+
+Possible upgrades for this project include:
+
+- Add user authentication
+- Implement a shopping cart system
+- Connect to a real database (MongoDB / PostgreSQL)
+- Build a modern frontend using React
+- Deploy the application to a cloud platform
+
+---
+
+# Author
+
+**Juhi Bhandari**
+
+Computer Programming Graduate  
+Toronto, Canada
